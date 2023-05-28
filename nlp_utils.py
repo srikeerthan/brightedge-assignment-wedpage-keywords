@@ -84,22 +84,32 @@ def sort_list_of_tuples(tuples, index):
     return tuples
 
 
-def merge_two_list_of_tuples_with_weight(word_frequency_tuples1, word_frequency_tuples2, weight=1):
+def merge_list_of_tuples_with_weights(word_frequency_tuples1, word_frequency_tuples2, word_frequency_tuples3,
+                                      weight1=1, weight2=1):
     """
     This method merges two lists of tuples by giving more weightage to the first list of tuples
     :param word_frequency_tuples1: first list of word frequency tuples
     :type word_frequency_tuples1: list
     :param word_frequency_tuples2: second list of word frequency tuples
     :type word_frequency_tuples2: list
-    :param weight: amount of weightage needs to be given to the first list words frequencies
-    :type weight: int
+    :param word_frequency_tuples3: third list of word frequency tuples
+    :type word_frequency_tuples3: list
+    :param weight1: amount of weightage needs to be given to the first list words frequencies
+    :type weight1: int
+    :param weight2: amount of weightage need to added to the second word frequency tuples
+    :type weight2: int
     :return: returns merged list of word frequency tuples
     :rtype: list
     """
     words_frequency_dict = {}
     for word_tuple in word_frequency_tuples1:
-        words_frequency_dict[word_tuple[0]] = word_tuple[1] * weight
+        words_frequency_dict[word_tuple[0]] = word_tuple[1] * weight1
     for word_tuple in word_frequency_tuples2:
+        if word_tuple[0] in words_frequency_dict:
+            words_frequency_dict[word_tuple[0]] += (word_tuple[1] * weight2)
+        else:
+            words_frequency_dict[word_tuple[0]] = (word_tuple[1] * weight2)
+    for word_tuple in word_frequency_tuples3:
         if word_tuple[0] in words_frequency_dict:
             words_frequency_dict[word_tuple[0]] += word_tuple[1]
         else:

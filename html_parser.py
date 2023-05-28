@@ -85,6 +85,30 @@ class HTMLParser:
 
         return headers
 
+    def get_page_meta_description(self):
+        """
+        This method return the meta description of a web page
+        :return: returns meta description text
+        :rtype: str
+        """
+        meta_description_tag = self.soup_obj.find("meta", {"name": "description"})
+        if meta_description_tag is None:
+            return ""
+        else:
+            return parse_text_data(meta_description_tag['content'])
+
+    def get_page_abstract_content(self):
+        """
+        This method returns the abstract content of the web page
+        :return: abstract description text
+        :rtype: str
+        """
+        abstract_tag = self.soup_obj.find("meta", {"name": "abstract"})
+        if abstract_tag is None:
+            return ""
+        else:
+            return parse_text_data(abstract_tag["content"])
+
     def get_content_data(self, html_tag_node, words_list):
         """
         This method constructs the page content text by recursively going through the

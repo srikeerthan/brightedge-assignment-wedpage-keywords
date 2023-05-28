@@ -4,7 +4,7 @@ from validators import ValidationFailure
 
 from html_parser import HTMLParser
 from nlp_utils import get_word_count_tuples_list, remove_stop_words, sort_list_of_tuples, \
-    merge_two_list_of_tuples_with_weight
+    merge_list_of_tuples_with_weights
 
 
 def is_valid_url(url_str):
@@ -63,6 +63,10 @@ def find_web_page_relevant_topics(url):
     page_key_words = html_obj.get_page_key_words()
     page_headers = html_obj.get_page_headers()
 
+    # collects the page meta description and abstract data
+    page_meta_description = html_obj.get_page_meta_description()
+    page_abstract_data = html_obj.get_page_abstract_content()
+
     # forms the highest frequency words from the page content
     parsed_body = html_obj.get_page_content()
     body_word_count_tuples = get_word_count_tuples_list(parsed_body)
@@ -79,9 +83,18 @@ def find_web_page_relevant_topics(url):
     keywords_count_tuples = sort_list_of_tuples(keywords_count_tuples, index=1)
     keywords_count_tuples = keywords_count_tuples[-10:]
 
+    # Forms highest frequency words from the page meta description and abstract tags
+    meta_description_abstract_text = page_meta_description + " " + page_abstract_data
+    description_words_frequencies_tuples = get_word_count_tuples_list(meta_description_abstract_text)
+    description_words_frequencies_tuples = remove_stop_words(description_words_frequencies_tuples)
+    description_words_frequencies_tuples = sort_list_of_tuples(description_words_frequencies_tuples, index=1)
+    description_words_frequencies_tuples = description_words_frequencies_tuples[-10:]
+
     # Merges both of the above highest frequency words by giving more weightage to the title, keywords and headers
     # than the content.
-    final_word_count_tuples = merge_two_list_of_tuples_with_weight(keywords_count_tuples, body_word_count_tuples, 3)
+    final_word_count_tuples = merge_list_of_tuples_with_weights(keywords_count_tuples,
+                                                                description_words_frequencies_tuples,
+                                                                body_word_count_tuples, 3, 3.5)
     final_word_count_tuples = sort_list_of_tuples(final_word_count_tuples, index=1)
     final_word_count_tuples = final_word_count_tuples[-5:]
     final_word_count_tuples.reverse()

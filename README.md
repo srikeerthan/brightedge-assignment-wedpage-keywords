@@ -1,6 +1,6 @@
 # brightedge-assignment-wedpage-keywords
 Author: Srikeerthan Reddy<br>
-Doumentation: 
+Doumentation: https://docs.google.com/document/d/1DfVptXFC8DcsCyfFNZdw5BRG-e8D6HDc1fFLkB4RzFE/edit?usp=sharing
 
 ## How to Execute the code:
  `1. Clone the Repository`<br>
